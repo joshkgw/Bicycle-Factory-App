@@ -37,10 +37,10 @@ class MainWindow(QMainWindow):
         button_layout: location for buttons to be placed
         name: text to be displayed on the button
         container: the widget to be displayed in the stacked layout once the button is pressed
-        destination: the function to be called when the button is pressed
+        destination: the function ('activate_menu_x()') to be called when the button is pressed
         """
         btn = QPushButton(name)
-        btn.pressed.connect(destination)    # Destination should correspond to an appropriate activate_menu_x()
+        btn.pressed.connect(destination)
         button_layout.addWidget(btn)    # Nests button inside button layout
         self.stack_layout.addWidget(Color(container))
 
