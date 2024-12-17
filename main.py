@@ -140,8 +140,6 @@ class MenuTabs(QWidget):
         # Create top-level layout
         layout = QVBoxLayout()
 
-
-
         layout.addWidget(QCheckBox("Order Option 2"))
 
         order_tab.setLayout(layout)
@@ -181,6 +179,7 @@ class Inventory:
         }
 
     def displayComponents(self):
+        """Returns a string of all components and their quantities."""
         return inspect.cleandoc(f"""
         Tubular Steel: {self.components["tubular_steel"]}
         Partial Frame: {self.components["partial_frame"]}
@@ -194,6 +193,7 @@ class Inventory:
         Seat: {self.components["seat"]}""")
 
     def restockComponent(self, component):
+        """Restocks the specified component by 5 units."""
         self.components[component] += 5
     
 
