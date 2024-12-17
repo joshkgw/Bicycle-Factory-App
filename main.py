@@ -7,6 +7,7 @@ import sys
 
 
 class MainWindow(QMainWindow):
+    """Main window for the application"""
     def __init__(self):
         super().__init__()
 
@@ -20,41 +21,52 @@ class MainWindow(QMainWindow):
         page_layout.addLayout(self.stack_layout)    #Nests stacked layout inside vertical layout
 
         # Tabbed menu using push buttons
-        self.create_menu_tab(button_layout, "Dashboard", "red", self.activate_menu_1)
-        self.create_menu_tab(button_layout, "Inventory", "green", self.activate_menu_2)
-        self.create_menu_tab(button_layout, "Orders", "blue", self.activate_menu_3)
-        self.create_menu_tab(button_layout, "Save", "yellow", self.activate_menu_4)
+        self.create_menu_tab(button_layout, "Dashboard", 1, self.activate_menu_1)
+        self.create_menu_tab(button_layout, "Inventory", 2, self.activate_menu_2)
+        self.create_menu_tab(button_layout, "Orders", 3, self.activate_menu_3)
+        self.create_menu_tab(button_layout, "Save", 4, self.activate_menu_4)
 
         # Apply layout to the window
         widget = QWidget()
         widget.setLayout(page_layout)
         self.setCentralWidget(widget)
 
-    def create_menu_tab(self, button_layout, name: str, container, destination):
+
+    def create_menu_tab(self, button_layout, name: str, container: int, destination):
         """Creates buttons for each tab in the menu
 
         Arguments:
         button_layout: location for buttons to be placed
         name: text to be displayed on the button
-        container: the widget to be displayed in the stacked layout once the button is pressed
+        container: integer corresponding to a match case which activates the correct tab
         destination: the function ('activate_menu_x()') to be called when the button is pressed
         """
         btn = QPushButton(name)
         btn.pressed.connect(destination)
         button_layout.addWidget(btn)    # Nests button inside button layout
-        self.stack_layout.addWidget(Color(container))
+        match container:
+            case 1:
+                self.stack_layout.addWidget(Dashboard("red"))
+            case 2:
+                self.stack_layout.addWidget(Inventory("blue"))
+            case 3:
+                self.stack_layout.addWidget(Orders("yellow"))
+
 
     def activate_menu_1(self):
         """Activates the dashboard tab"""
         self.stack_layout.setCurrentIndex(0)
 
+
     def activate_menu_2(self):
         """Activates the inventory tab"""
         self.stack_layout.setCurrentIndex(1)
 
+
     def activate_menu_3(self):
         """Activates the orders tab"""
         self.stack_layout.setCurrentIndex(2)
+
 
     def activate_menu_4(self):
         """Prompts the user to save the program"""
@@ -71,8 +83,28 @@ class MainWindow(QMainWindow):
             pass
 
 
-class Color(QWidget):
-    """Takes a colour as a parameter and instantiates an object containing a solid colour widget"""
+class Dashboard(QWidget):
+    """Dashboard widget"""
+    def __init__(self, color):
+        super().__init__()
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        palette.setColor(QPalette.Window, QColor(color))
+        self.setPalette(palette)
+
+
+class Inventory(QWidget):
+    """Inventory widget"""
+    def __init__(self, color):
+        super().__init__()
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        palette.setColor(QPalette.Window, QColor(color))
+        self.setPalette(palette)
+
+
+class Orders(QWidget):
+    """Orders widget"""
     def __init__(self, color):
         super().__init__()
         self.setAutoFillBackground(True)
