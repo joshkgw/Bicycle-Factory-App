@@ -7,111 +7,69 @@ import sys
 
 
 class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Greener-Bikes Bicycle Factory")
+        self.setCentralWidget(MenuTabs())
+        self.resize(800, 500)
+
+class MenuTabs(QWidget):
     """Main window for the application"""
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Greener-Bikes Bicycle Factory")
+        # Create a top-level layout
+        layout = QVBoxLayout()
+        self.setLayout(layout)
 
-        page_layout = QVBoxLayout()
-        button_layout = QHBoxLayout()
-        self.stack_layout = QStackedLayout()
+        # Create the tab widget with 4 tabs
+        tabs = QTabWidget()
+        tabs.addTab(self.dashboardTabUI(), "Dashboard")
+        tabs.addTab(self.inventoryTabUI(), "Inventory")
+        tabs.addTab(self.orderTabUI(), "Order")
+        tabs.addTab(self.saveTabUI(), "Save")
+        layout.addWidget(tabs)
 
-        page_layout.addLayout(button_layout)    #Nest horizontal layout inside vertical layout, for the menu buttons
-        page_layout.addLayout(self.stack_layout)    #Nests stacked layout inside vertical layout
+    def dashboardTabUI(self):
+        """Create the Dashboard page UI."""
+        dashboard_tab = QWidget()
+        layout = QVBoxLayout()
+        layout.addWidget(QCheckBox("Dashboard Option 1"))
+        layout.addWidget(QCheckBox("Dashboard Option 2"))
+        dashboard_tab.setLayout(layout)
+        return dashboard_tab
 
-        # Tabbed menu using push buttons
-        self.create_menu_tab(button_layout, "Dashboard", 1, self.activate_menu_1)
-        self.create_menu_tab(button_layout, "Inventory", 2, self.activate_menu_2)
-        self.create_menu_tab(button_layout, "Orders", 3, self.activate_menu_3)
-        self.create_menu_tab(button_layout, "Save", 4, self.activate_menu_4)
+    def inventoryTabUI(self):
+        """Create the Inventory page UI."""
+        inventory_tab = QWidget()
+        layout = QVBoxLayout()
+        layout.addWidget(QCheckBox("Inventory Option 1"))
+        layout.addWidget(QCheckBox("Inventory Option 2"))
+        inventory_tab.setLayout(layout)
+        return inventory_tab
 
-        # Apply layout to the window
-        widget = QWidget()
-        widget.setLayout(page_layout)
-        self.setCentralWidget(widget)
+    def orderTabUI(self):
+        """Create the Order page UI."""
+        order_tab = QWidget()
+        layout = QVBoxLayout()
+        layout.addWidget(QCheckBox("Order Option 1"))
+        layout.addWidget(QCheckBox("Order Option 2"))
+        order_tab.setLayout(layout)
+        return order_tab
 
-
-    def create_menu_tab(self, button_layout, name: str, container: int, destination):
-        """Creates buttons for each tab in the menu
-
-        Arguments:
-        button_layout: location for buttons to be placed
-        name: text to be displayed on the button
-        container: integer corresponding to a match case which activates the correct tab
-        destination: the function ('activate_menu_x()') to be called when the button is pressed
-        """
-        btn = QPushButton(name)
-        btn.pressed.connect(destination)
-        button_layout.addWidget(btn)    # Nests button inside button layout
-        match container:
-            case 1:
-                self.stack_layout.addWidget(Dashboard("red"))
-            case 2:
-                self.stack_layout.addWidget(Inventory("blue"))
-            case 3:
-                self.stack_layout.addWidget(Orders("yellow"))
-
-
-    def activate_menu_1(self):
-        """Activates the dashboard tab"""
-        self.stack_layout.setCurrentIndex(0)
-
-
-    def activate_menu_2(self):
-        """Activates the inventory tab"""
-        self.stack_layout.setCurrentIndex(1)
-
-
-    def activate_menu_3(self):
-        """Activates the orders tab"""
-        self.stack_layout.setCurrentIndex(2)
-
-
-    def activate_menu_4(self):
-        """Prompts the user to save the program"""
-        confirmation = QMessageBox.question(
-            self,
-            "Save",
-            "Are you sure that you would like to save the program?"
+    def saveTabUI(self):
+        """Create the Save page UI"""
+        save_tab = QWidget()
+        layout = QVBoxLayout()
+        layout.addWidget(
+            QLabel("Click to save your changes.")
         )
-
-        # Save functionality not implemented, so pass
-        if confirmation.Yes:
-            pass
-        else:
-            pass
-
-
-class Dashboard(QWidget):
-    """Dashboard widget"""
-    def __init__(self, color):
-        super().__init__()
-        self.setAutoFillBackground(True)
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
-
-
-class Inventory(QWidget):
-    """Inventory widget"""
-    def __init__(self, color):
-        super().__init__()
-        self.setAutoFillBackground(True)
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
-
-
-class Orders(QWidget):
-    """Orders widget"""
-    def __init__(self, color):
-        super().__init__()
-        self.setAutoFillBackground(True)
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
-
+        save_button = QPushButton("Save")
+        save_button.clicked.connect(lambda: print("Saved"))
+        layout.addWidget(save_button)
+        layout.addStretch()
+        save_tab.setLayout(layout)
+        return save_tab
 
 def main():
     # Instantiates application event loop
