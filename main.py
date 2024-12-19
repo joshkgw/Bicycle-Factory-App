@@ -33,6 +33,8 @@ class MenuTabs(QWidget):
         # Create instance of inventory
         self.inventory = Inventory()
 
+        self.currentComponentsLabel = QLabel("")
+
         # Create a top-level layout
         layout = QVBoxLayout()
         self.setLayout(layout)
@@ -52,11 +54,94 @@ class MenuTabs(QWidget):
         # Create top-level layout
         layout = QVBoxLayout()
 
-        layout.addWidget(QCheckBox("Dashboard Option 1"))
-        layout.addWidget(QCheckBox("Dashboard Option 2"))
+        complete_partial_frame = QPushButton("Complete frame welding - 1 partial frame (requires: 1 tubular steel)")
+        complete_fork = QPushButton("Complete fork welding - 1 fork (requires: 1 tubular steel)")
+        complete_complete_frame = QPushButton("Complete front fork assembly - 1 complete frame (requires: 1 partial frame, 1 fork)")
+        complete_paint = QPushButton("Complete painting (requires: 1 paint)")
+        complete_pedal = QPushButton("Complete pedal assembly (requires: 1 pedal)")
+        complete_wheel = QPushButton("Complete wheel assembly (requires: 1 wheel)")
+        complete_gear = QPushButton("Complete gear assembly (requires: 1 gear)")
+        complete_brake = QPushButton("Complete brake assembly (requires: 1 brake)")
+        complete_light = QPushButton("Complete light assembly (requires: 1 light)")
+        complete_seat = QPushButton("Complete seat assembly (requires: 1 seat)")
+
+        layout.addWidget(complete_partial_frame)
+        layout.addWidget(complete_fork)
+        layout.addWidget(complete_complete_frame)
+        layout.addWidget(complete_paint)
+        layout.addWidget(complete_pedal)
+        layout.addWidget(complete_wheel)
+        layout.addWidget(complete_gear)
+        layout.addWidget(complete_brake)
+        layout.addWidget(complete_light)
+        layout.addWidget(complete_seat)
+
+        complete_partial_frame.clicked.connect(self.handleCompletePartialFrame)
+        complete_fork.clicked.connect(self.handleCompleteFork)
+        complete_complete_frame.clicked.connect(self.handleCompleteCompleteFrame)
+        complete_paint.clicked.connect(self.handleCompletePaint)
+        complete_pedal.clicked.connect(self.handleCompletePedal)
+        complete_wheel.clicked.connect(self.handleCompleteWheel)
+        complete_gear.clicked.connect(self.handleCompleteGear)
+        complete_brake.clicked.connect(self.handleCompleteBrake)
+        complete_light.clicked.connect(self.handleCompleteLight)
+        complete_seat.clicked.connect(self.handleCompleteSeat)
 
         dashboard_tab.setLayout(layout)
         return dashboard_tab
+
+
+    def handleCompletePartialFrame(self):
+        self.useComponent("tubular_steel")
+        self.restockAndUpdate("partial_frame", 1)
+
+
+    def handleCompleteFork(self):
+        self.useComponent("tubular_steel")
+        self.restockAndUpdate("fork", 1)
+
+
+    def handleCompleteCompleteFrame(self):
+        self.useComponent("partial_frame")
+        self.useComponent("fork")
+        self.restockAndUpdate("complete_frame", 1)
+
+
+    def handleCompletePaint(self):
+        self.useComponent("paint")
+
+
+    def handleCompletePedal(self):
+        self.useComponent("pedal")
+
+
+    def handleCompleteWheel(self):
+        self.useComponent("wheel")
+
+
+    def handleCompleteGear(self):
+        self.useComponent("gear")
+
+
+    def handleCompleteBrake(self):
+        self.useComponent("brake")
+
+
+    def handleCompleteLight(self):
+        self.useComponent("light")
+
+
+    def handleCompleteSeat(self):
+        self.useComponent("seat")
+
+
+    def useComponent(self, component_name):
+        # Use the specified component
+        self.inventory.useComponent(component_name)
+        # Fetch the updated components information
+        updated_components = self.inventory.getComponents()
+        # Update the QLabel with new information
+        self.currentComponentsLabel.setText(updated_components)
 
 
     def inventoryTabUI(self):
@@ -72,7 +157,7 @@ class MenuTabs(QWidget):
         # Top right: inventory List
         # Store displayComponents method in attribute and pass to QLabel
         self.currentComponents = self.inventory.getComponents()
-        self.currentComponentsLabel = QLabel(self.currentComponents)
+        self.currentComponentsLabel.setText(self.currentComponents)
 
         stat_layout.addWidget(self.currentComponentsLabel)
 
@@ -83,6 +168,7 @@ class MenuTabs(QWidget):
         restock_fork = QPushButton("Restock Fork")
         restock_complete_frame = QPushButton("Restock Complete Frame")
         restock_paint = QPushButton("Restock Paint")
+        restock_pedal = QPushButton("Restock Pedal")
         restock_wheel = QPushButton("Restock Wheel")
         restock_gear = QPushButton("Restock Gear")
         restock_brake = QPushButton("Restock Brake")
@@ -90,16 +176,17 @@ class MenuTabs(QWidget):
         restock_seat = QPushButton("Restock Seat")
 
         # Connect buttons
-        restock_tubular_steel.clicked.connect(lambda: self.restockAndUpdate("tubular_steel"))
-        restock_partial_frame.clicked.connect(lambda: self.restockAndUpdate("partial_frame"))
-        restock_fork.clicked.connect(lambda: self.restockAndUpdate("fork"))
-        restock_complete_frame.clicked.connect(lambda: self.restockAndUpdate("complete_frame"))
-        restock_paint.clicked.connect(lambda: self.restockAndUpdate("paint"))
-        restock_wheel.clicked.connect(lambda: self.restockAndUpdate("wheel"))
-        restock_gear.clicked.connect(lambda: self.restockAndUpdate("gear"))
-        restock_brake.clicked.connect(lambda: self.restockAndUpdate("brake"))
-        restock_light.clicked.connect(lambda: self.restockAndUpdate("light"))
-        restock_seat.clicked.connect(lambda: self.restockAndUpdate("seat"))
+        restock_tubular_steel.clicked.connect(lambda: self.restockAndUpdate("tubular_steel", 5))
+        restock_partial_frame.clicked.connect(lambda: self.restockAndUpdate("partial_frame", 5))
+        restock_fork.clicked.connect(lambda: self.restockAndUpdate("fork", 5))
+        restock_complete_frame.clicked.connect(lambda: self.restockAndUpdate("complete_frame", 5))
+        restock_paint.clicked.connect(lambda: self.restockAndUpdate("paint", 5))
+        restock_pedal.clicked.connect(lambda: self.restockAndUpdate("pedal", 5))
+        restock_wheel.clicked.connect(lambda: self.restockAndUpdate("wheel", 5))
+        restock_gear.clicked.connect(lambda: self.restockAndUpdate("gear", 5))
+        restock_brake.clicked.connect(lambda: self.restockAndUpdate("brake", 5))
+        restock_light.clicked.connect(lambda: self.restockAndUpdate("light", 5))
+        restock_seat.clicked.connect(lambda: self.restockAndUpdate("seat", 5))
 
         # Add buttons to stat_layout
         restock_layout.addWidget(restock_tubular_steel)
@@ -107,6 +194,7 @@ class MenuTabs(QWidget):
         restock_layout.addWidget(restock_fork)
         restock_layout.addWidget(restock_complete_frame)
         restock_layout.addWidget(restock_paint)
+        restock_layout.addWidget(restock_pedal)
         restock_layout.addWidget(restock_wheel)
         restock_layout.addWidget(restock_gear)
         restock_layout.addWidget(restock_brake)
@@ -124,9 +212,9 @@ class MenuTabs(QWidget):
         return inventory_tab
 
 
-    def restockAndUpdate(self, component_name):
+    def restockAndUpdate(self, component_name, quantity):
         # Restock the specified component
-        self.inventory.restockComponent(component_name)
+        self.inventory.restockComponent(component_name, quantity)
         # Fetch the updated components information
         updated_components = self.inventory.getComponents()
         # Update the QLabel with new information
@@ -220,6 +308,7 @@ class Inventory:
             "fork": 0,
             "complete_frame": 0,
             "paint": 0,
+            "pedal": 0,
             "wheel": 0,
             "gear": 0,
             "brake": 0,
@@ -236,6 +325,7 @@ class Inventory:
         Fork: {self.components["fork"]}
         Complete Frame: {self.components["complete_frame"]}
         Paint: {self.components["paint"]}
+        Pedal: {self.components["pedal"]}
         Wheel: {self.components["wheel"]}
         Gear: {self.components["gear"]}
         Brake: {self.components["brake"]}
@@ -243,9 +333,14 @@ class Inventory:
         Seat: {self.components["seat"]}""")
 
 
-    def restockComponent(self, component):
+    def useComponent(self, component):
+        """Uses the specified component."""
+        self.components[component] -= 1
+
+
+    def restockComponent(self, component, quantity):
         """Restocks the specified component by 5 units."""
-        self.components[component] += 5
+        self.components[component] += quantity
     
 
 
@@ -291,6 +386,7 @@ class ProductionLine:
         self.fork_assembled: bool = False
         self.complete_frame_assembled: bool = False
         self.painted: bool = False
+        self.pedal_assembled: bool = False
         self.wheel_assembled: bool = False
         self.gear_assembled: bool = False
         self.brake_assembled: bool = False
