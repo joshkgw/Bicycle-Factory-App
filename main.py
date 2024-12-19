@@ -232,17 +232,17 @@ class MenuTabs(QWidget):
         self.buyer_email = QLineEdit("Enter your email address.")
 
         self.bike_size = QComboBox()
-        self.bike_size.addItems(["Small", "Medium", "Large", "Extra Large"])
+        self.bike_size.addItems(["Small Frame", "Medium Frame", "Large Frame", "Extra Large Frame"])
         self.bike_colour = QComboBox()
-        self.bike_colour.addItems(["Red", "Blue", "Green", "Yellow", "Black", "White"])
+        self.bike_colour.addItems(["Red Paint", "Blue Paint", "Green Paint", "Yellow Paint", "Black Paint", "White Paint"])
         self.bike_wheel_size = QComboBox()
-        self.bike_wheel_size.addItems(["26 inch", "27.5 inch", "29 inch"])
+        self.bike_wheel_size.addItems(["26 inch Wheels", "27.5 inch Wheels", "29 inch Wheels"])
         self.bike_gear_type = QComboBox()
-        self.bike_gear_type.addItems(["Standard", "Premium"])
+        self.bike_gear_type.addItems(["Standard Gears", "Premium Gears"])
         self.bike_brake_type = QComboBox()
-        self.bike_brake_type.addItems(["Disk", "Rim"])
+        self.bike_brake_type.addItems(["Disk Brakes", "Rim Brakes"])
         self.bike_light_type = QComboBox()
-        self.bike_light_type.addItems(["Standard", "LED"])
+        self.bike_light_type.addItems(["Standard Lights", "LED Lights"])
 
         self.confirm_order = QPushButton("Create Order")
 
