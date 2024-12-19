@@ -4,3 +4,5 @@ The Greener-Bikes Bicycle Factory App will facilitate the production process of 
 inventory, managing assembly stations, and recording customer orders. This application will help
 streamline the manufacturing process, allowing employees to efficiently manage resources and
 respond to customer demands.
+
+The program currently does meet the full specification - personally, this was a very challenging project - but I am very happy with where it is at.
