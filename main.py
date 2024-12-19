@@ -1,5 +1,4 @@
 import inspect
-from dataclasses import dataclass
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
@@ -72,7 +71,7 @@ class MenuTabs(QWidget):
 
         # Top right: inventory List
         # Store displayComponents method in attribute and pass to QLabel
-        self.currentComponents = self.inventory.displayComponents()
+        self.currentComponents = self.inventory.getComponents()
         self.currentComponentsLabel = QLabel(self.currentComponents)
 
         stat_layout.addWidget(self.currentComponentsLabel)
@@ -129,7 +128,7 @@ class MenuTabs(QWidget):
         # Restock the specified component
         self.inventory.restockComponent(component_name)
         # Fetch the updated components information
-        updated_components = self.inventory.displayComponents()
+        updated_components = self.inventory.getComponents()
         # Update the QLabel with new information
         self.currentComponentsLabel.setText(updated_components)
 
@@ -140,10 +139,60 @@ class MenuTabs(QWidget):
         # Create top-level layout
         layout = QVBoxLayout()
 
-        layout.addWidget(QCheckBox("Order Option 2"))
+        self.buyer_name = QLineEdit("Enter your full name.")
+        self.buyer_address = QLineEdit("Enter your delivery address.")
+        self.buyer_email = QLineEdit("Enter your email address.")
+
+        self.bike_size = QComboBox()
+        self.bike_size.addItems(["Small", "Medium", "Large", "Extra Large"])
+        self.bike_colour = QComboBox()
+        self.bike_colour.addItems(["Red", "Blue", "Green", "Yellow", "Black", "White"])
+        self.bike_wheel_size = QComboBox()
+        self.bike_wheel_size.addItems(["26 inch", "27.5 inch", "29 inch"])
+        self.bike_gear_type = QComboBox()
+        self.bike_gear_type.addItems(["Standard", "Premium"])
+        self.bike_brake_type = QComboBox()
+        self.bike_brake_type.addItems(["Disk", "Rim"])
+        self.bike_light_type = QComboBox()
+        self.bike_light_type.addItems(["Standard", "LED"])
+
+        self.confirm_order = QPushButton("Create Order")
+
+        layout.addWidget(self.buyer_name)
+        layout.addWidget(self.buyer_address)
+        layout.addWidget(self.buyer_email)
+
+        layout.addWidget(self.bike_size)
+        layout.addWidget(self.bike_colour)
+        layout.addWidget(self.bike_wheel_size)
+        layout.addWidget(self.bike_gear_type)
+        layout.addWidget(self.bike_brake_type)
+        layout.addWidget(self.bike_light_type)
+
+        layout.addWidget(self.confirm_order)
+
+        self.confirm_order.clicked.connect(self.createOrder)
+
 
         order_tab.setLayout(layout)
         return order_tab
+
+
+    def createOrder(self):
+        self.new_order = Order(
+            name = self.buyer_name.text(),
+            delivery_address = self.buyer_address.text(),
+            email_address = self.buyer_email.text(),
+
+            frame_size = self.bike_size.currentText(),
+            colour = self.bike_colour.currentText(),
+            wheel_size = self.bike_wheel_size.currentText(),
+            gear_type = self.bike_gear_type.currentText(),
+            brake_type = self.bike_brake_type.currentText(),
+            light_type = self.bike_light_type.currentText()
+        )
+
+        self.new_order.confirmOrder()
 
 
     def saveTabUI(self):
@@ -178,7 +227,8 @@ class Inventory:
             "seat": 0,
         }
 
-    def displayComponents(self):
+
+    def getComponents(self):
         """Returns a string of all components and their quantities."""
         return inspect.cleandoc(f"""
         Tubular Steel: {self.components["tubular_steel"]}
@@ -192,10 +242,62 @@ class Inventory:
         Light: {self.components["light"]}
         Seat: {self.components["seat"]}""")
 
+
     def restockComponent(self, component):
         """Restocks the specified component by 5 units."""
         self.components[component] += 5
     
+
+
+class Order:
+    def __init__(self, name, delivery_address, email_address, frame_size, colour, wheel_size, gear_type, brake_type, light_type):
+        # Customer info fields
+        self.name: str = name
+        self.delivery_address: str = delivery_address
+        self.email_address: str = email_address
+
+        # Bike info fields
+        self.frame_size: str = frame_size
+        self.colour: str = colour
+        self.wheel_size: str = wheel_size
+        self.gear_type: str = gear_type
+        self.brake_type: str = brake_type
+        self.light_type: str = light_type
+
+        # Assembly status attribute
+        self. is_assembled: bool = False
+
+
+    def createOrder(self):
+        new_bike = ProductionLine(self.is_assembled)
+
+
+    def confirmOrder(self):
+        print("Order confirmed.")
+        print(f"Customer: {self.name}")
+        print(f"Delivery Address: {self.delivery_address}")
+        print(f"Email Address: {self.email_address}")
+        print(f"Frame Size: {self.frame_size}")
+        print(f"Colour: {self.colour}")
+        print(f"Wheel Size: {self.wheel_size}")
+        print(f"Gear Type: {self.gear_type}")
+        print(f"Brake Type: {self.brake_type}")
+        print(f"Light Type: {self.light_type}")
+
+
+class ProductionLine:
+    def __init__(self, is_assembled):
+        self.partial_frame_assembled: bool = False
+        self.fork_assembled: bool = False
+        self.complete_frame_assembled: bool = False
+        self.painted: bool = False
+        self.wheel_assembled: bool = False
+        self.gear_assembled: bool = False
+        self.brake_assembled: bool = False
+        self.light_assembled: bool = False
+        self.seat_assembled: bool = False
+        self.is_assembled: bool = is_assembled
+
 
 def main():
     # Instantiates application event loop
