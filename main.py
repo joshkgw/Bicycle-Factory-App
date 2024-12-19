@@ -206,7 +206,7 @@ class MenuTabs(QWidget):
         inv_layout.addLayout(stat_layout)
 
         #Lower widget
-        inv_layout.addWidget(DevColor('blue'))
+        #inv_layout.addWidget(DevColor('blue'))
 
         inventory_tab.setLayout(inv_layout)
         return inventory_tab
